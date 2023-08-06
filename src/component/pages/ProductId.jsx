@@ -5,7 +5,7 @@ import PostService from "../../API/PostService";
 import Loader from "../UI/Loader/Loader";
 import { FaUserCircle } from 'react-icons/fa';
 
-const PostIdPage = () => {
+const ProductId = () => {
     const params = useParams()
     const [post, setPost] = useState({});
     const [comments, setComments] = useState([]);
@@ -59,4 +59,4 @@ const PostIdPage = () => {
     );
 };
 
-export default PostIdPage;
+export default ProductId;

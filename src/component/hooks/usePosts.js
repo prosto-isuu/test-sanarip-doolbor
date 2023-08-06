@@ -1,9 +1,15 @@
 import {useMemo} from "react";
+import {useDispatch} from "react-redux";
+import {searchProduct} from "../../redux/ProductSlice";
 
 export const useSortedPosts = (posts, sort) => {
+
+    const dispatch = useDispatch()
+
+
     const sortedPost = useMemo(() => {
         if (sort) {
-            return [...posts].sort((a, b) => a[sort].localeCompare(b[sort]))
+            return [...posts]
         }
         return posts
     }, [sort, posts])
@@ -12,12 +18,12 @@ export const useSortedPosts = (posts, sort) => {
 }
 
 export const usePosts = (post, sort, query) => {
+
+    const dispatch = useDispatch()
+
     const sortedPost = useSortedPosts(post, sort)
     const sortedAndSearchedPosts = useMemo(() => {
-        return sortedPost.filter(post => {
-            return post.title.toLowerCase().includes(query)
-        })
+        dispatch(searchProduct(query));
     }, [query, sortedPost])
-
     return sortedAndSearchedPosts;
 }

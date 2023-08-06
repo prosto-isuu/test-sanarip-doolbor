@@ -1,5 +1,6 @@
 import React from "react";
 import style from './MySelect.module.css'
+
 export const MySelect = ({options, defaultValue, value, onChange}) => {
     return (
         <select
@@ -9,7 +10,8 @@ export const MySelect = ({options, defaultValue, value, onChange}) => {
             <option
                 value=''
                 disabled={true}
-            >{defaultValue}</option>
+            >{defaultValue}
+            </option>
             {options.map(option => {
                 return <option
                     key={option.value}

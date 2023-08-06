@@ -1,6 +1,6 @@
 .myBtn {
     padding: 5px 15px;
-    margin: 2px;
+    margin: 2px 10px 2px 2px;
     color: teal;
     border-radius: 3px;
     font-size: 14px;
@@ -14,3 +14,5 @@
     background-color: azure;
     box-shadow: 1px 1px 9px 1px rgba(34, 60, 80, 0.2);
 }
+
+

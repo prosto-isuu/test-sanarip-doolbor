@@ -1,12 +1,14 @@
 import About from "../component/pages/About";
-import Posts from "../component/pages/Posts";
-import PostIdPage from "../component/pages/PostIdPage";
+import Products from "../component/pages/Products";
+import ProductId from "../component/pages/ProductId";
 import Login from "../component/pages/Login";
+import Cart from "../component/pages/Cart";
 
 export const privateRouters = [
     {path:'/about', component: About, exact:true},
-    {path:'/posts', component: Posts, exact:true},
-    {path:'/posts/:id', component: PostIdPage, exact:true},
+    {path:'/posts', component: Products, exact:true},
+    {path:'/posts/:id', component: ProductId, exact:true},
+    {path:'/cart', component: Cart, exact:true},
 ]
 
 

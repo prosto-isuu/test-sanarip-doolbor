@@ -18,4 +18,13 @@ export default class PostService {
         const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
         return response
     }
+    static async getAllCartProduct() {
+        const response = await axios.get(`'https://fakestoreapi.com/carts`);
+        return response;
+    }
+    static async addCart() {
+        const response = await axios.get(`'https://fakestoreapi.com/carts`);
+        return response;
+    }
+
 }

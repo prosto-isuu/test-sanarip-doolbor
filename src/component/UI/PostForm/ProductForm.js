@@ -13,7 +13,7 @@ const ProductForm = ({create}) => {
 
         }
         create(newPost)
-        setPost({title: '', body: '', image:''})
+        setPost({title: '', body: '', image: '', price: ''})
     }
 
     return (
@@ -34,9 +34,16 @@ const ProductForm = ({create}) => {
                 placeholder="Ссылка на изображение!"
                 value={post.image}
                 onChange={event => setPost({...post, image: event.target.value})}/>
+            <MyInput
+                type='number'
+                placeholder="Цена"
+                value={post.image}
+                onChange={event => setPost({...post, price: event.target.value})}/>
             <MyButton
                 onClick={addNewPost}
-            >Создать пост</MyButton>
+            >
+                Создать пост
+            </MyButton>
         </form>
     )
 }

@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import MyButton from "./UI/Button/MyButton";
 import {useNavigate} from "react-router-dom";
+import {BsFillCartPlusFill} from 'react-icons/bs'
 
 const Product = (props) => {
 
@@ -32,8 +33,9 @@ const Product = (props) => {
             </div>
             <div className="post_btns">
                 <MyButton onClick={() => {
-                    props.remove(props.post)
-                }}>Удалить</MyButton>
+                    props.addCart(props.post)
+                }}><BsFillCartPlusFill/>
+                </MyButton>
                 <MyButton onClick={() => router(`/posts/${props.post.id}`)}>Открыть</MyButton>
             </div>
         </div>

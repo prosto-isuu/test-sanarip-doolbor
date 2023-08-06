@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import '../styles/App.css'
 import {getPagesArray, getPagesCount} from "../../uttils/pages";
 import {useFetching} from "../hooks/useFetching";
@@ -12,32 +12,43 @@ import ProductForm from "../UI/PostForm/ProductForm";
 import {usePosts} from "../hooks/usePosts";
 import {useObserver} from "../hooks/useObserver";
 import {MySelect} from "../UI/Select/MySelect";
-import { IoCreateOutline } from 'react-icons/io5';
+import {IoCreateOutline} from 'react-icons/io5';
+import {useDispatch, useSelector} from "react-redux";
+import {fetchAllProduct, searchProduct} from "../../redux/ProductSlice";
 
 
-const Posts = (props) => {
-
-    const [posts, setPosts] = useState([])
+const Products = (props) => {
+    const dispatch = useDispatch()
+    const products = useSelector(state => state.products);
+    const [posts, setPosts] = useState(products)
     const [totalPages, setTotalPages] = useState(0);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const lastElement = useRef()
     let pagesArray = getPagesArray(totalPages)
 
-    const [fetchPost, isPostLoading, postError] = useFetching(async () => {
-        const response = await PostService.getAll(limit, page)
-        setPosts([...posts, ...response.data])
-        const totalCount = response.headers['x-total-count']
-        setTotalPages(getPagesCount(totalCount, limit))
-    })
 
-    useObserver(lastElement, page < totalPages, isPostLoading, () => {
+    const [fetchProduct, isProductLoadings, productErrors] = useFetching(async () => {
+        const response = await PostService.getAll(limit, page);
+        dispatch(fetchAllProduct(response.data))
+        const totalCount = response.headers['x-total-count'];
+        setTotalPages(getPagesCount(totalCount, limit));
+    },);
+
+    useObserver(lastElement, page < totalPages, isProductLoadings, () => {
         setPage(page + 1);
     })
 
     const [modal, setModal] = useState(false)
 
     const [filter, setFilter] = useState({sort: '', query: ''})
+    const [title, setTitle] = useState('');
+
+    const onSearchHandler = useCallback((event) => {
+        setTitle(event.currentTarget.value);
+        dispatch(searchProduct(title))
+    }, [title]);
+
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
 
     const createPost = (newPost) => {
@@ -45,14 +56,22 @@ const Posts = (props) => {
         setModal(false)
     }
 
-    const removePost = (post) => {
-        setPosts(posts.filter(i => {
-            return i.id !== post.id
-        }))
+    const createProduct = (newPost) => {
+        // event.preventDefault()
+        // dispatch(newPost)
+        setModal(false);
+    }
+
+
+    const addCart = (post) => {
+        if (post) {
+            // dispatch(removeProduct(post.id));
+        }
+        console.log(post)
     }
 
     useEffect(() => {
-        fetchPost()
+        fetchProduct()
     }, [page, limit])
 
     const changePost = (page) => {
@@ -63,9 +82,8 @@ const Posts = (props) => {
     return (
         <div className="App">
             <MyButton
-                style={{marginTop: '10px'}}
                 onClick={() => setModal(true)}>
-                Добавить товар  <IoCreateOutline/>
+                Добавить товар <IoCreateOutline/>
             </MyButton>
             <MyModal
                 visible={modal}
@@ -75,12 +93,12 @@ const Posts = (props) => {
             <hr
                 style={{margin: '15px 0'}}/>
             <ProductFilter
-                filter={filter}
-                setFilter={setFilter}/>
+                filter={title}
+                setFilter={onSearchHandler}/>
             <MySelect
                 value={limit}
                 onChange={value => setLimit(value)}
-                defaultValue='Количество элементов'
+                defaultValue='Количество товаров'
                 options={[
                     {value: 5, name: '5'},
                     {value: 10, name: '10'},
@@ -88,22 +106,24 @@ const Posts = (props) => {
                     {value: -1, name: 'Все'},
                 ]}
             />
-            {postError &&
+            {productErrors &&
                 <h1>Произошла ошибка 404</h1>}
             <ProductList
-                posts={sortedAndSearchedPosts}
+                posts={products}
                 title={'Sanarip shop doolboor'}
-                remove={removePost}/>
+                addCart={addCart}/>
             <div
                 style={{background: 'teal'}}
                 ref={lastElement} // - здесь я передал качестве ref - ту переменную в котором будет сидеть этот элемент!
             >-
             </div>
-            {isPostLoading &&
+            {isProductLoadings &&
                 <div
-                    style={{display: 'flex',
+                    style={{
+                        display: 'flex',
                         justifyContent: 'center',
-                        marginTop: '20px'}}
+                        marginTop: '20px'
+                    }}
                 >
                     <Loader/>
                 </div>}
@@ -122,4 +142,4 @@ const Posts = (props) => {
     );
 }
 
-export default Posts;
+export default Products;
